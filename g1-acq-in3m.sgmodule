@@ -1,0 +1,13 @@
+#!name=G1 ACQ IN 3M
+#!desc=India 3-month intro build. Target SKU com.google.gemini.2tb.ai.m.3month_ip_99p. Open plans inside the Gemini app so StoreKit can resolve that bundle. Patched to accept the com.google.gemini namespace.
+#!system=ios
+
+[Rule]
+AND,((PROTOCOL,UDP),(DEST-PORT,443)),REJECT-NO-DROP
+
+[Script]
+g1-acq = type=http-response,pattern=^https:\/\/one\.google\.com\/,requires-body=1,max-size=0,script-path=https://cdn.jsdelivr.net/gh/Rulanv/g1-acq-in3m@main/g1-acq-discount.js
+g1-sku-report = type=http-request,pattern=^https:\/\/one\.google\.com\/g1-sku-report\/?(?:\?.*)?$,requires-body=1,max-size=0,script-path=https://cdn.jsdelivr.net/gh/Rulanv/g1-acq-in3m@main/g1-sku-report-discount.js
+
+[MITM]
+hostname = %APPEND% one.google.com
